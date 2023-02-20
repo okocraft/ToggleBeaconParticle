@@ -1,0 +1,13 @@
+name: ${project.artifactId}
+version: ${project.version}
+main: ${project.groupId}.${project.artifactId}
+authors: [ Siroshun09 ]
+api-version: "1.19"
+
+permissions:
+  togglebeaconparticle.command:
+    default: true
+
+commands:
+  togglebeaconparticle:
+    aliases: [ "tbp" ]
