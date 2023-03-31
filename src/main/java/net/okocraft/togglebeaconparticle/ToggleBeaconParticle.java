@@ -15,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class ToggleBeaconParticle extends JavaPlugin implements Listener {
 
-    private final Set<UUID> hiding = new HashSet<>();
+    private final Set<UUID> hiding = Collections.synchronizedSet(new HashSet<>());
 
     @Override
     public void onEnable() {
