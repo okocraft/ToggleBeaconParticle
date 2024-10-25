@@ -9,7 +9,7 @@ A Paper plugin that toggles the display of the beacon effect particles.
 
 ## Requirements
 
-- Java 17
+- Java 21
 - Paper
 
 ## Command
@@ -24,4 +24,4 @@ A Paper plugin that toggles the display of the beacon effect particles.
 
 This project is under the GPL-3.0 license. Please see [LICENSE](LICENSE) for more info.
 
-Copyright © 2023, OKOCRAFT
+Copyright © 2023-2024, OKOCRAFT
