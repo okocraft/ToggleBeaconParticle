@@ -8,7 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+@NullMarked
 public class ToggleBeaconParticle extends JavaPlugin implements Listener {
 
     private final Set<UUID> hiding = Collections.synchronizedSet(new HashSet<>());
@@ -38,7 +39,7 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
             sender.sendMessage("This command can only be executed by the player.");
             return true;
@@ -100,7 +101,7 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
         }
     }
 
-    private @NotNull Path getDataFile() {
+    private Path getDataFile() {
         return getDataFolder().toPath().resolve("players.txt");
     }
 }
