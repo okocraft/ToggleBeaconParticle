@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @NullMarked
 public class ToggleBeaconParticle extends JavaPlugin implements Listener {
@@ -68,10 +69,10 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
     }
 
     private void loadHiding() {
-        var file = this.getDataFile();
+        Path file = this.getDataFile();
 
         if (Files.isRegularFile(file)) {
-            try (var lines = Files.lines(file, StandardCharsets.UTF_8)) {
+            try (Stream<String> lines = Files.lines(file, StandardCharsets.UTF_8)) {
                 lines.map(line -> {
                     try {
                         return UUID.fromString(line);
@@ -88,8 +89,8 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
 
     private void saveHiding() {
         try {
-            var file = this.getDataFile();
-            var parent = file.getParent();
+            Path file = this.getDataFile();
+            Path parent = file.getParent();
 
             if (!Files.isDirectory(parent)) {
                 Files.createDirectories(parent);
