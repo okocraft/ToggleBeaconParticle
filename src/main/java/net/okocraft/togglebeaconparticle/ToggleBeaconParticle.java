@@ -46,16 +46,17 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
             return true;
         }
 
-        if (sender.hasPermission("togglebeaconparticle.command")) {
-            if (this.hiding.contains(player.getUniqueId())) {
-                this.hiding.remove(player.getUniqueId());
-                sender.sendMessage("§7Beacon effect particle turned §aon");
-            } else {
-                this.hiding.add(player.getUniqueId());
-                sender.sendMessage("§7Beacon effect particle turned §coff");
-            }
-        } else {
+        if (!sender.hasPermission("togglebeaconparticle.command")) {
             sender.sendMessage("You don't have the permission to execute this command.");
+            return true;
+        }
+
+        if (this.hiding.contains(player.getUniqueId())) {
+            this.hiding.remove(player.getUniqueId());
+            sender.sendMessage("§7Beacon effect particle turned §aon");
+        } else {
+            this.hiding.add(player.getUniqueId());
+            sender.sendMessage("§7Beacon effect particle turned §coff");
         }
 
         return true;
@@ -71,19 +72,21 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
     private void loadHiding() {
         Path file = this.getDataFile();
 
-        if (Files.isRegularFile(file)) {
-            try (Stream<String> lines = Files.lines(file, StandardCharsets.UTF_8)) {
-                lines.map(line -> {
-                    try {
-                        return UUID.fromString(line);
-                    } catch (IllegalArgumentException e) {
-                        this.getLogger().warning("Invalid uuid: " + line);
-                        return null;
-                    }
-                }).filter(Objects::nonNull).forEach(this.hiding::add);
-            } catch (IOException e) {
-                this.getLogger().severe("Could not load players who hiding beacon particles. Message: " + e.getMessage());
-            }
+        if (!Files.isRegularFile(file)) {
+            return;
+        }
+
+        try (Stream<String> lines = Files.lines(file, StandardCharsets.UTF_8)) {
+            lines.map(line -> {
+                try {
+                    return UUID.fromString(line);
+                } catch (IllegalArgumentException e) {
+                    this.getLogger().warning("Invalid uuid: " + line);
+                    return null;
+                }
+            }).filter(Objects::nonNull).forEach(this.hiding::add);
+        } catch (IOException e) {
+            this.getLogger().severe("Could not load players who hiding beacon particles. Message: " + e.getMessage());
         }
     }
 
