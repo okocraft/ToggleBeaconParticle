@@ -1,6 +1,8 @@
 package net.okocraft.togglebeaconparticle;
 
 import com.destroystokyo.paper.event.block.BeaconEffectEvent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -42,22 +44,28 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) {
-            sender.sendMessage("This command can only be executed by the player.");
+            sender.sendMessage(Component.text("This command can only be executed by the player.", NamedTextColor.RED));
             return true;
         }
 
         if (!sender.hasPermission("togglebeaconparticle.command")) {
-            sender.sendMessage("You don't have the permission to execute this command.");
+            sender.sendMessage(Component.text("You don't have the permission to execute this command.", NamedTextColor.RED));
             return true;
         }
 
+        Component toggledTo;
         if (this.hiding.contains(player.getUniqueId())) {
             this.hiding.remove(player.getUniqueId());
-            sender.sendMessage("§7Beacon effect particle turned §aon");
+            toggledTo = Component.text("on", NamedTextColor.GREEN);
         } else {
             this.hiding.add(player.getUniqueId());
-            sender.sendMessage("§7Beacon effect particle turned §coff");
+            toggledTo = Component.text("off", NamedTextColor.RED);
         }
+
+        sender.sendMessage(Component.textOfChildren(
+                Component.text("Beacon effect particle turned ", NamedTextColor.GRAY),
+                toggledTo
+        ));
 
         return true;
     }
