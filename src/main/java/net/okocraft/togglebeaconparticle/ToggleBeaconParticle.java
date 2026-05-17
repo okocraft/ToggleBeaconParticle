@@ -29,13 +29,13 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        loadHiding();
-        getServer().getPluginManager().registerEvents(this, this);
+        this.loadHiding();
+        this.getServer().getPluginManager().registerEvents(this, this);
     }
 
     @Override
     public void onDisable() {
-        saveHiding();
+        this.saveHiding();
     }
 
     @Override
@@ -46,11 +46,11 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
         }
 
         if (sender.hasPermission("togglebeaconparticle.command")) {
-            if (hiding.contains(player.getUniqueId())) {
-                hiding.remove(player.getUniqueId());
+            if (this.hiding.contains(player.getUniqueId())) {
+                this.hiding.remove(player.getUniqueId());
                 sender.sendMessage("§7Beacon effect particle turned §aon");
             } else {
-                hiding.add(player.getUniqueId());
+                this.hiding.add(player.getUniqueId());
                 sender.sendMessage("§7Beacon effect particle turned §coff");
             }
         } else {
@@ -62,13 +62,13 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onBeaconEffect(BeaconEffectEvent event) {
-        if (hiding.contains(event.getPlayer().getUniqueId())) {
+        if (this.hiding.contains(event.getPlayer().getUniqueId())) {
             event.setEffect(event.getEffect().withParticles(false));
         }
     }
 
     private void loadHiding() {
-        var file = getDataFile();
+        var file = this.getDataFile();
 
         if (Files.isRegularFile(file)) {
             try (var lines = Files.lines(file, StandardCharsets.UTF_8)) {
@@ -76,32 +76,32 @@ public class ToggleBeaconParticle extends JavaPlugin implements Listener {
                     try {
                         return UUID.fromString(line);
                     } catch (IllegalArgumentException e) {
-                        getLogger().warning("Invalid uuid: " + line);
+                        this.getLogger().warning("Invalid uuid: " + line);
                         return null;
                     }
-                }).filter(Objects::nonNull).forEach(hiding::add);
+                }).filter(Objects::nonNull).forEach(this.hiding::add);
             } catch (IOException e) {
-                getLogger().severe("Could not load players who hiding beacon particles. Message: " + e.getMessage());
+                this.getLogger().severe("Could not load players who hiding beacon particles. Message: " + e.getMessage());
             }
         }
     }
 
     private void saveHiding() {
         try {
-            var file = getDataFile();
+            var file = this.getDataFile();
             var parent = file.getParent();
 
             if (!Files.isDirectory(parent)) {
                 Files.createDirectories(parent);
             }
 
-            Files.writeString(file, hiding.stream().map(UUID::toString).collect(Collectors.joining(System.lineSeparator())), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.writeString(file, this.hiding.stream().map(UUID::toString).collect(Collectors.joining(System.lineSeparator())), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         } catch (IOException e) {
-            getLogger().severe("Could not save players who hiding beacon particles. Message: " + e.getMessage());
+            this.getLogger().severe("Could not save players who hiding beacon particles. Message: " + e.getMessage());
         }
     }
 
     private Path getDataFile() {
-        return getDataFolder().toPath().resolve("players.txt");
+        return this.getDataFolder().toPath().resolve("players.txt");
     }
 }
