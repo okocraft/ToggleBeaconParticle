@@ -4,7 +4,7 @@
 
     <groupId>net.okocraft.togglebeaconparticle</groupId>
     <artifactId>ToggleBeaconParticle</artifactId>
-    <version>3</version>
+    <version>3.0</version>
 
     <properties>
         <project.charset>UTF-8</project.charset>
